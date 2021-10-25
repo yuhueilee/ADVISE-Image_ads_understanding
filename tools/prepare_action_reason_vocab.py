@@ -8,6 +8,7 @@ import argparse
 import nltk
 from readers.utils import load_action_reason_annots
 from readers.utils import tokenize
+import functools
 
 def _create_vocab(sentences, min_count=2):
   """Computes the vocab given the corpus.
@@ -24,11 +25,11 @@ def _create_vocab(sentences, min_count=2):
     for word in tokenize(sentence):
       vocab[word] = vocab.get(word, 0) + 1
 
-  print >> sys.stderr, 'Number of words: %i.' %(len(vocab))
+  print('Number of words: %i.' %(len(vocab)), file=sys.stderr)
   for k in vocab.keys():
     if vocab[k] < min_count:
       del vocab[k]
-  print >> sys.stderr, 'Number of words after pruning: %i.' % (len(vocab))
+  print('Number of words after pruning: %i.' % (len(vocab)), file=sys.stderr)
   return vocab
 
 
@@ -45,8 +46,7 @@ def _check_coverage(vocab, sentences):
       if not word in vocab:
         uncover += 1
         break
-  print >> sys.stderr, 'Vocab coverage: %.4lf' % ( 
-      1.0 - 1.0 * uncover / len(sentences))
+  print('Vocab coverage: %.4lf' % (1.0 - 1.0 * uncover / len(sentences)), file=sys.stderr)
 
 
 def _save_and_index_vocab(vocab, output_vocab_path):
@@ -59,7 +59,7 @@ def _save_and_index_vocab(vocab, output_vocab_path):
   Returns:
     index: a mapping from word to id.
   """
-  vocab = sorted(vocab.iteritems(), lambda x, y: -cmp(x[1], y[1]))
+  vocab = sorted(vocab.items(), key=functools.cmp_to_key(cmp), reverse=True)
   index = {}
   with open(output_vocab_path, 'w') as fp:
     for idx, (k, v) in enumerate(vocab):
@@ -72,24 +72,31 @@ def main(args):
   """Main."""
   # Load dataset.
   annots = load_action_reason_annots(args.action_reason_annot_path)
-  print >> sys.stderr, 'Load annotations for %i images.' % (len(annots))
+  print('Load annotations for %i images.' % (len(annots)), file=sys.stderr)
 
   # Create corpus.
   sentences = []
   count = {}
-  for _, annot in annots.iteritems():
+  for _, annot in annots.items():
     for stmt in annot['pos_examples']:
-      sentences.append(stmt)
-  print >> sys.stderr, 'Build a corpus with %i sentences.' % (len(sentences))
+      sentences.append(''.join(list(stmt)))
+  print('Build a corpus with %i sentences.' % (len(sentences)), file=sys.stderr)
 
   # Generate vocabulary.
   word_and_freq = _create_vocab(sentences, args.min_count)
 
   _check_coverage(word_and_freq, sentences)
   _save_and_index_vocab(word_and_freq, args.output_vocab_path)
-  print >> sys.stderr, 'Vocab saved to %s' % (args.output_vocab_path)
+  print('Vocab saved to %s' % (args.output_vocab_path), file=sys.stderr)
 
-  print >> sys.stderr, 'Done'
+  print('Done', file=sys.stderr)
+
+def cmp(x, y):
+  if x[1] < y[1]:
+    return -1
+  elif x[1] > y[1]:
+    return 1
+  return 0
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
@@ -107,8 +114,8 @@ if __name__ == "__main__":
   args = parser.parse_args()
   assert os.path.isfile(args.action_reason_annot_path)
 
-  print >> sys.stderr, 'parsed input parameters:'
-  print >> sys.stderr, json.dumps(vars(args), indent=2)
+  print('parsed input parameters:', file=sys.stderr)
+  print(json.dumps(vars(args), indent=2), file=sys.stderr)
 
   main(args)
 

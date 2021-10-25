@@ -7,6 +7,7 @@ import os
 
 import tensorflow as tf
 from tensorflow import logging
+import functools
 
 from protos import train_config_pb2
 
@@ -171,6 +172,6 @@ def get_latest_model(saved_ckpts_dir):
     raise ValueError('No checkpoint was found in %s.' % (saved_ckpts_dir))
 
   ckpt_fn = lambda x: int(re.findall('ckpt-(\d+).meta', x)[0])
-  model_path = sorted(path_list, lambda x, y: -cmp(ckpt_fn(x), ckpt_fn(y)))[0]
+  model_path = sorted(path_list, key=functools.cmp_to_key(ckpt_fn), reverse=True)[0]
   model_path = model_path[:-5]
   return model_path

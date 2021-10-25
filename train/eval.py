@@ -100,7 +100,7 @@ def export_inference(results, groundtruths, filename):
     filename: the path to the output json file.
   """
   final_results = {}
-  for image_id, result in results.iteritems():
+  for image_id, result in results.items():
     pred = np.array(result['distances']).argmin()
     final_results[image_id] = groundtruths[image_id]['all_examples'][pred]
 
@@ -142,7 +142,7 @@ def evaluate_once(sess, writer, global_step, predictions, groundtruths):
 
   if writer is not None:
     summary = tf.Summary()
-    for k, v in metrics.iteritems():
+    for k, v in metrics.items():
       summary.value.add(tag='metrics/{}'.format(k), simple_value=v)
     writer.add_summary(summary, global_step=global_step)
 

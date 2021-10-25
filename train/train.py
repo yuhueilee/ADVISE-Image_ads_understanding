@@ -94,7 +94,7 @@ def main(_):
         restore_init_fn(sess)
 
     # Loss and optimizer.
-    for loss_name, loss_tensor in loss_dict.iteritems():
+    for loss_name, loss_tensor in loss_dict.items():
       tf.losses.add_loss(loss_tensor)
       tf.summary.scalar('losses/{}'.format(loss_name), loss_tensor)
     total_loss = tf.losses.get_total_loss()

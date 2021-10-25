@@ -20,7 +20,7 @@ def _load_vocab(filename):
     for line in fp.readlines():
       word, freq = line.strip('\n').split('\t')
       vocab.append((word, int(freq)))
-  print >> sys.stderr, 'Load %i words from %s.' % (len(vocab), filename)
+  print('Load %i words from %s.' % (len(vocab), filename), file=sys.stderr)
   return vocab
 
 
@@ -43,12 +43,12 @@ def _load_data(filename):
   word2vec = {}
   for line_index, line in enumerate(lines):
     items = line.strip('\n').split()
-    word, vec = items[0], map(float, items[1:])
+    word, vec = items[0], list(map(float, items[1:]))
     assert len(vec) == embedding_size
 
     word2vec[word] = np.array(vec)
     if line_index % 10000== 0:
-      print >> sys.stderr, 'On load %s/%s' % (line_index, len(lines))
+      print('On load %s/%s' % (line_index, len(lines)), file=sys.stderr)
   return word2vec
 
 
@@ -74,7 +74,7 @@ def _export_data(word2vec, vocab, filename_emb, filename_vocab, min_tf=10):
     elif freq >= min_tf:
       count += 1
       vec = args.init_width * (np.random.rand(dims) * 2 - 1)
-      print >> sys.stderr, 'Unknown word: %s, freq=%i.' % (word, freq)
+      print('Unknown word: %s, freq=%i.' % (word, freq), file=sys.stderr)
     else:
       continue
 
@@ -88,9 +88,8 @@ def _export_data(word2vec, vocab, filename_emb, filename_vocab, min_tf=10):
   with open(filename_vocab, 'w') as fp:
     fp.write('\n'.join(words))
 
-  print >> sys.stderr, 'Shape of word2vec:', vecs.shape
-  print >> sys.stderr, 'Unknown words: %i/%i(%.2lf%%).' % (
-      count, len(words), count * 100.0 / len(words))
+  print('Shape of word2vec:', vecs.shape, file=sys.stderr)
+  print('Unknown words: %i/%i(%.2lf%%).' % (count, len(words), count * 100.0 / len(words)), file=sys.stderr)
 
 
 def main(args):
@@ -132,10 +131,10 @@ if __name__ == "__main__":
   assert os.path.isfile(args.vocab_path)
   assert os.path.isfile(args.data_path)
 
-  print >> sys.stderr, 'parsed input parameters:'
-  print >> sys.stderr, json.dumps(vars(args), indent=2)
+  print('parsed input parameters:', file=sys.stderr)
+  print(json.dumps(vars(args), indent=2), file=sys.stderr)
 
   main(args)
 
-  print >> sys.stderr, 'Done'
+  print('Done', file=sys.stderr)
   exit(0)

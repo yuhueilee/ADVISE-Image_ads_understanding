@@ -11,6 +11,7 @@ import os.path
 import numpy as np
 import random
 import cv2
+import functools
 
 import tensorflow as tf
 
@@ -47,7 +48,7 @@ def _read_examples_list():
   examples = []
   nms = NMSProcessor(max_output_size=10, iou_threshold=0.5)
 
-  for image_id, regions in annots.iteritems():
+  for image_id, regions in annots.items():
     # Preprocess annotations.
     boxes, scores = [], []
     for i, entity in enumerate(regions):
@@ -59,7 +60,7 @@ def _read_examples_list():
 
     # Sort by area and process nms.
     area_func = lambda x: (x[2] - x[0]) * (x[3] - x[1])
-    boxes = sorted(boxes, lambda x, y: cmp(area_func(x), area_func(y)))
+    boxes = sorted(boxes, key=functools.cmp_to_key(area_func))
     _, selected_boxes, _ = nms.process(np.array(boxes), np.array(scores))
 
     regions = []

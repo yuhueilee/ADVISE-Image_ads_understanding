@@ -4,6 +4,8 @@ import string
 
 import nltk
 
+nltk.download('punkt')
+
 _printable = set(string.printable)
 _convert_to_printable = lambda caption: filter(lambda x: x in _printable, caption)
 
@@ -39,7 +41,7 @@ def load_action_reason_annots(filename):
     data = json.loads(fp.read())
 
   annots = {}
-  for image_id, examples in data.iteritems():
+  for image_id, examples in data.items():
     if len(examples) == 2:
       pos_examples, all_examples = examples
     elif len(examples) == 15:
@@ -68,7 +70,7 @@ def load_densecap_annots(filename, max_densecaps_per_image=10):
     data = json.loads(fp.read())
 
   annots = {}
-  for image_id, annot in data.iteritems():
+  for image_id, annot in data.items():
     annots[image_id] = [region['name'] for region \
                        in annot['regions'][:max_densecaps_per_image]]
   return annots

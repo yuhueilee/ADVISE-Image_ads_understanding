@@ -29,7 +29,7 @@ def evaluate(results, groundtruths):
   all_accuracy, all_recall_at_3 = [], []
   all_rank_min, all_rank_avg, all_rank_med = [], [], []
 
-  for image_id, result in results.iteritems():
+  for image_id, result in results.items():
     assert image_id in groundtruths
     distances = result['distances']
 

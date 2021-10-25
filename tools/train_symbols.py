@@ -81,7 +81,7 @@ def _get_data(annots, img_features, number_of_classes):
     y: a [total, n_labels] np array.
   """
   x, y = [], []
-  for image_id, annot in annots.iteritems():
+  for image_id, annot in annots.items():
     label = np.zeros((number_of_classes), dtype=np.float32)
     for i in annot:
       label[i] = 1
