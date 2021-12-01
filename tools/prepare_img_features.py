@@ -6,12 +6,11 @@ import cv2
 import json
 import numpy as np
 import tensorflow as tf
-import tensorflow.contrib.slim as slim
 
 from tensorflow import app
 from tensorflow import flags
 from tensorflow import logging
-from slim.nets import nets_factory
+from tensorflow.contrib.slim.python.slim.nets import nets_factory
 
 from utils.train_utils import default_session_config
 
