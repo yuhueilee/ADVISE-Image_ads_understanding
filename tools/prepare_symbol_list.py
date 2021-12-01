@@ -6,6 +6,8 @@ import json
 import string
 import argparse
 
+sys.path.append('/content/ADVISE')
+
 import nltk
 from readers.utils import load_action_reason_annots
 from readers.utils import load_symbol_cluster

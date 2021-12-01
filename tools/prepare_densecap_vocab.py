@@ -5,6 +5,8 @@ import json
 import string
 import argparse
 
+sys.path.append('/content/ADVISE')
+
 import nltk
 from readers.utils import tokenize
 import functools

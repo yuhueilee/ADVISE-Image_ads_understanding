@@ -6,6 +6,8 @@ from __future__ import print_function
 import sys
 import random
 
+sys.path.append('/content/ADVISE')
+
 import numpy as np
 import tensorflow as tf
 

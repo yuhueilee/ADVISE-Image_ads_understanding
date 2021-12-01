@@ -6,6 +6,7 @@ import cv2
 import json
 import numpy as np
 import tensorflow as tf
+import tensorflow.contrib.slim as slim
 
 from tensorflow import app
 from tensorflow import flags
