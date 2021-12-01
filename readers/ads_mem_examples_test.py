@@ -4,7 +4,7 @@ from __future__ import division
 from __future__ import print_function
 
 import sys
-sys.path.append('/content/ADVISE')
+sys.path.append('/content/ADVISE-Image_ads_understanding')
 
 import numpy as np
 import tensorflow as tf

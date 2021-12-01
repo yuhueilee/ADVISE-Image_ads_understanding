@@ -4,7 +4,7 @@ import json
 import string
 import argparse
 
-sys.path.append('/content/ADVISE')
+sys.path.append('/content/ADVISE-Image_ads_understanding')
 
 import nltk
 from readers.utils import load_action_reason_annots
