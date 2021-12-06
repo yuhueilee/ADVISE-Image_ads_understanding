@@ -10,7 +10,7 @@ import tensorflow as tf
 from tensorflow import app
 from tensorflow import flags
 from tensorflow import logging
-from tensorflow.contrib.slim.python.slim.nets import nets_factory
+from slim.nets import nets_factory
 
 from utils.train_utils import default_session_config
 
